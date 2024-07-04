@@ -35,9 +35,13 @@ const useStore = create<State & Actions>()(
         (set) => ({
           currentPage: 0,
           setCurrentPage: (currentPage) =>
-            set((state) => {
-              state.currentPage = currentPage;
-            }),
+            set(
+              (state) => {
+                state.currentPage = currentPage;
+              },
+              false,
+              "setCurrentPage"
+            ),
         }),
         {
           name: "currentPage",

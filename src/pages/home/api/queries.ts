@@ -15,7 +15,7 @@ export const GET_SCHEMA = gql`
   }
 `;
 
-export const GET_REPOSITORY_SCHEMA_FIED = gql`
+export const GET_REPOSITORY_SCHEMA_FIELD = gql`
   query {
     __type(name: "Repository") {
       name
@@ -29,14 +29,14 @@ export const GET_REPOSITORY_SCHEMA_FIED = gql`
 `;
 
 export const GET_OWN_REPOSITORIES = gql`
-  query getOwnRepositories {
+  query GetOwnRepositories {
     viewer {
       repositories(first: 100, isFork: false) {
         edges {
           node {
             id
             name
-            url           
+            url
             updatedAt
             stargazerCount
           }
@@ -47,14 +47,16 @@ export const GET_OWN_REPOSITORIES = gql`
 `;
 
 export const GET_REPOSITORIES_BY_NAME = gql`
-  query getRepositoriesByName {
-    search(type: REPOSITORY, query: "micro", first: 100) {
+  query GetRepositoriesByName($queryString: String!) {
+    search(type: REPOSITORY, query: $queryString, first: 100) {
       edges {
         node {
           ... on Repository {
+            id
             name
             url
-            description
+            updatedAt
+            stargazerCount
           }
         }
       }
