@@ -8,12 +8,20 @@ import {
 import { immer } from "zustand/middleware/immer";
 import { get, set, del } from "idb-keyval";
 
+import { RepositoryEdge } from "./interfaces";
+
 type State = {
   currentPage: number;
+  query: string;
+  btnCount: number;
+  repos: RepositoryEdge[];
 };
 
 type Actions = {
   setCurrentPage: (currentPage: State["currentPage"]) => void;
+  setQuery: (query: State["query"]) => void;
+  setBtnCount: (btnCount: State["btnCount"]) => void;
+  setRepos: (edges: State["repos"]) => void;
 };
 
 const storage: StateStorage = {
@@ -34,6 +42,9 @@ const useStore = create<State & Actions>()(
       persist(
         (set) => ({
           currentPage: 0,
+          query: "",
+          btnCount: 0,
+          repos: [],
           setCurrentPage: (currentPage) =>
             set(
               (state) => {
@@ -42,11 +53,36 @@ const useStore = create<State & Actions>()(
               false,
               "setCurrentPage"
             ),
+          setQuery: (query) =>
+            set(
+              (state) => {
+                state.query = query;
+              },
+              false,
+              "setQuery"
+            ),
+          setBtnCount: (btnCount) =>
+            set(
+              (state) => {
+                state.btnCount = btnCount;
+              },
+              false,
+              "setBtnCount"
+            ),
+          setRepos: (repos) =>
+            set(
+              (state) => {
+                state.repos = repos;
+              },
+              false,
+              "setRepos"
+            ),
         }),
         {
           name: "currentPage",
           partialize: (state) => ({
             currentPage: state.currentPage,
+            query: state.query,
           }),
           storage: createJSONStorage(() => storage),
         }

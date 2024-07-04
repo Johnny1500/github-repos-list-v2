@@ -1,0 +1,7 @@
+.paginator__container {
+  display: flex;
+  gap: 5px;
+  width: 100%;
+  margin-top: 50px;
+  margin-left: 200px;
+}

@@ -1,4 +1,4 @@
-import { useState, useEffect, useDeferredValue, MouseEvent } from "react";
+import { useState, useEffect, useDeferredValue } from "react";
 import { useLazyQuery } from "@apollo/client";
 import useStore from "../../shared/model/store";
 import {
@@ -8,30 +8,26 @@ import {
   GET_REPOSITORIES_BY_NAME,
 } from "./api/queries";
 
-import { RepositoryEdge } from "./model/interfaces";
+import { RepositoryEdge } from "../../shared/model/interfaces";
+import Paginator from "../../app/widgets/paginator";
 
 export default function HomePage() {
   let repoListContent: JSX.Element = <p>Loading...</p>;
 
-  const [query, setQuery] = useState("");
   const [repos, setRepos] = useState<RepositoryEdge[]>([]);
-  const [btnCount, setBtnCount] = useState<number>(0);
+
+  const [currentPage, setCurrentPage, query, setQuery, setBtnCount] = useStore(
+    (state) => [
+      state.currentPage,
+      state.setCurrentPage,
+      state.query,
+      state.setQuery,
+
+      state.setBtnCount,
+    ]
+  );
 
   const deferredQuery = useDeferredValue(query);
-
-  const [currentPage, setCurrentPage] = useStore((state) => [
-    state.currentPage,
-    state.setCurrentPage,
-  ]);
-
-  function handlePaginationClick(e: MouseEvent) {
-    const target = e.target as HTMLElement;
-    const btn = target.closest("button");
-
-    if (!btn) return;
-
-    setCurrentPage(+btn.value);
-  }
 
   const [
     getReposByName,
@@ -80,9 +76,10 @@ export default function HomePage() {
         },
       });
     } else {
+      setCurrentPage(0);
       getOwnRepos();
     }
-  }, [deferredQuery, getReposByName, getOwnRepos]);
+  }, [deferredQuery, getReposByName, getOwnRepos, setCurrentPage]);
 
   if (getReposByNameLoading || getOwnReposLoading) {
     repoListContent = <p>Loading...</p>;
@@ -128,36 +125,13 @@ export default function HomePage() {
           type="text"
           id="searh"
           name="search"
+          defaultValue={query}
           style={{ maxWidth: "900px" }}
           onChange={(e) => setQuery(e.target.value)}
         />
       </div>
       {repoListContent}
-      <div
-        style={{
-          display: "flex",
-          gap: "5px",
-          width: "100%",
-          justifyContent: "center",
-          marginTop: "50px",
-        }}
-        onClick={(e) => handlePaginationClick(e)}
-      >
-        {Array.from({ length: btnCount }).map((_, index) => {
-          return (
-            <button
-              key={index}
-              value={index}
-              style={{
-                backgroundColor: index === currentPage ? "white" : "black",
-                color: index === currentPage ? "black" : "white",
-              }}
-            >
-              {index + 1}
-            </button>
-          );
-        })}
-      </div>
+      <Paginator />
     </main>
   );
 }
