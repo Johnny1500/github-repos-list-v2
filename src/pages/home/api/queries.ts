@@ -1,33 +1,5 @@
 import { gql } from "@apollo/client";
 
-export const GET_SCHEMA = gql`
-  query {
-    __schema {
-      types {
-        name
-        kind
-        description
-        fields {
-          name
-        }
-      }
-    }
-  }
-`;
-
-export const GET_REPOSITORY_SCHEMA_FIELD = gql`
-  query {
-    __type(name: "Repository") {
-      name
-      kind
-      description
-      fields {
-        name
-      }
-    }
-  }
-`;
-
 export const GET_OWN_REPOSITORIES = gql`
   query GetOwnRepositories {
     viewer {

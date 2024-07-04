@@ -1,12 +1,7 @@
 import { useEffect, useDeferredValue } from "react";
 import { useLazyQuery } from "@apollo/client";
 import useStore from "../../shared/model/store";
-import {
-  GET_SCHEMA,
-  GET_REPOSITORY_SCHEMA_FIELD,
-  GET_OWN_REPOSITORIES,
-  GET_REPOSITORIES_BY_NAME,
-} from "./api/queries";
+import { GET_OWN_REPOSITORIES, GET_REPOSITORIES_BY_NAME } from "./api/queries";
 
 import Paginator from "../../app/widgets/paginator";
 import RepoList from "../../app/widgets/repos-list";

@@ -1,0 +1,16 @@
+.repo__container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.repo__owner {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+
+.repo__header {
+  font-size: larger;
+}

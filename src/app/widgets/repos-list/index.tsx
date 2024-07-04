@@ -1,5 +1,6 @@
 import useStore from "../../../shared/model/store";
 import { RepositoryEdge } from "../../../shared/model/interfaces";
+import { Link } from "react-router-dom";
 
 // Отображенные репозитории
 export default function RepoList(): JSX.Element {
@@ -19,7 +20,9 @@ export default function RepoList(): JSX.Element {
 
           return (
             <li key={id}>
-              {name} - {stargazerCount} - {updatedAt} - {url}
+              <Link to={id}>
+                {name} - {stargazerCount} - {updatedAt} - {url}
+              </Link>
             </li>
           );
         })}
