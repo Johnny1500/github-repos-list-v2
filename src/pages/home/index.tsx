@@ -1,4 +1,4 @@
-import { useState, useEffect, useDeferredValue } from "react";
+import { useEffect, useDeferredValue } from "react";
 import { useLazyQuery } from "@apollo/client";
 import useStore from "../../shared/model/store";
 import {
@@ -8,24 +8,19 @@ import {
   GET_REPOSITORIES_BY_NAME,
 } from "./api/queries";
 
-import { RepositoryEdge } from "../../shared/model/interfaces";
 import Paginator from "../../app/widgets/paginator";
+import RepoList from "../../app/widgets/repos-list";
+import SearchInput from "../../app/widgets/search-input";
 
-export default function HomePage() {
+export default function HomePage(): JSX.Element {
   let repoListContent: JSX.Element = <p>Loading...</p>;
 
-  const [repos, setRepos] = useState<RepositoryEdge[]>([]);
-
-  const [currentPage, setCurrentPage, query, setQuery, setBtnCount] = useStore(
-    (state) => [
-      state.currentPage,
-      state.setCurrentPage,
-      state.query,
-      state.setQuery,
-
-      state.setBtnCount,
-    ]
-  );
+  const [setCurrentPage, query, setBtnCount, setRepos] = useStore((state) => [
+    state.setCurrentPage,
+    state.query,
+    state.setBtnCount,
+    state.setRepos,
+  ]);
 
   const deferredQuery = useDeferredValue(query);
 
@@ -91,45 +86,12 @@ export default function HomePage() {
     repoListContent = <p>Error : {getOwnReposError.message}</p>;
 
   if (getReposByNameData || getOwnReposData) {
-    repoListContent = (
-      <ul>
-        {repos
-          .slice(currentPage * 10, (currentPage + 1) * 10)
-          .map((edge: RepositoryEdge) => {
-            const {
-              node: { id, name, stargazerCount, updatedAt, url },
-            } = edge;
-
-            return (
-              <li key={id}>
-                {name} - {stargazerCount} - {updatedAt} - {url}
-              </li>
-            );
-          })}
-      </ul>
-    );
+    repoListContent = <RepoList />;
   }
 
   return (
     <main>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "5px",
-          marginLeft: "20px",
-        }}
-      >
-        <label htmlFor="search">Поиск по названию</label>
-        <input
-          type="text"
-          id="searh"
-          name="search"
-          defaultValue={query}
-          style={{ maxWidth: "900px" }}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-      </div>
+      <SearchInput />
       {repoListContent}
       <Paginator />
     </main>

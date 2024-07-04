@@ -2,6 +2,7 @@ import useStore from "../../../shared/model/store";
 import { handlePaginationClick } from "./model/utils";
 import "./ui/index.css";
 
+// Пагинация полученных результатов
 export default function Paginator(): JSX.Element {
   const [btnCount, currentPage, setCurrentPage] = useStore((state) => [
     state.btnCount,
