@@ -28,18 +28,33 @@ export const GET_REPOSITORY_SCHEMA_FIED = gql`
   }
 `;
 
-export const GET_REPOSITORIES = gql`
-  query AllRepositories {
+export const GET_OWN_REPOSITORIES = gql`
+  query getOwnRepositories {
     viewer {
       repositories(first: 100, isFork: false) {
         edges {
           node {
             id
             name
-            url
-            createdAt
+            url           
             updatedAt
             stargazerCount
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const GET_REPOSITORIES_BY_NAME = gql`
+  query getRepositoriesByName {
+    search(type: REPOSITORY, query: "micro", first: 100) {
+      edges {
+        node {
+          ... on Repository {
+            name
+            url
+            description
           }
         }
       }
